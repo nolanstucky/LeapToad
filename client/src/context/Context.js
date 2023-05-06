@@ -1,0 +1,33 @@
+import {createContext, useReducer} from "react";
+import { useEffect } from "react";
+import Reducer from "./Reducer";
+
+const INITIAL_STATE = {
+    user: JSON.parse(localStorage.getItem("user")) || null,
+    isFetching: false,
+    error: false
+}
+
+export const Context = createContext()
+
+export const ContextProvider = ({children}) => {
+    const [state, dispatch] = useReducer(Reducer, INITIAL_STATE);
+
+    // whenever state.user changes, execute this function
+    //
+    useEffect(()=> {    
+        // can't pass state.user directly, need to use json
+        localStorage.setItem("user", JSON.stringify(state.user));
+    },[state.user]);
+
+    return(
+        <Context.Provider value={{
+            user:state.user,
+            isFetching: state.isFetching,
+            error: state.error,
+            dispatch
+        }}>
+            {children}
+        </Context.Provider>
+    )
+}
