@@ -1,41 +1,68 @@
-import { useEffect, useState } from "react"
-import { useLocation } from "react-router"
-import Header from "../../components/header/Header"
-import Posts from "../../components/posts/Posts"
-import Sidebar from "../../components/sidebar/Sidebar"
-import "./home.css"
-import axios from "axios"
+import React from "react";
+import ReactDOM from "react-dom";
+import Graph from "react-vis-network-graph";
+import bilgates from "./billgates.PNG"
 
 export default function Home() {
-    // not quite sure what useState is, it's a react component; however, the statement seems to
-    // describe where setPosts() is going to send data
-    const [posts,setPosts] = useState([]);
-    // this line is similar to location call in SinglePost.jsx, but in this case, we're getting
-    // only the "search" field from the object
-    const {search} = useLocation()
-    // not sure on what useEffect() really means, but it calls axios to look at our rest api via
-    // referring to the proxy + the given path, so http://localhost:5000/api/posts
-    useEffect(()=>{
-        const fetchPosts = async ()=>{
-            /*console.log("HOME INTERCEPTOR");
-            axios.interceptors.request.use(request => {
-                console.log('Starting Request', JSON.stringify(request, null, 2))
-                return request
-            })*/
-            const res = await axios.get("/api/posts/"+search) 
-            setPosts(res.data);
+    const graph = {
+        nodes: [
+          { id: 1, shape: "circularImage", image: bilgates },
+          { id: 2, shape: "circularImage", image: bilgates },
+          { id: 3, shape: "circularImage", image: bilgates },
+          { id: 4, shape: "circularImage", image: bilgates },
+          { id: 5, shape: "circularImage", image: bilgates },
+          { id: 6, shape: "circularImage", image: bilgates }
+        ],
+        edges: [
+          { from: 1, to: 2 },
+          { from: 1, to: 3 },
+          { from: 1, to: 4 },
+          { from: 1, to: 5 },
+          { from: 2, to: 6 }
+        ]
+      };
+    
+      const options = {
+        layout: {
+          hierarchical: false
+        },
+        edges: {
+          color: {
+            color: "black",
+            highlight: "blue"
+          },
+          length: "100",
+          arrows: "false",
+          width: "5",
+          selectionWidth: function (width) {return width * 1.5;}
+        },
+        nodes: {
+          borderWidth: "5",
+          borderWidthSelected: "10",
+          color: {
+            border: "black"
+          }
+        }    
+      };
+    
+      const events = {
+        select: function (event) {
+          var { nodes, edges } = event;
+          console.log(edges);
+          console.log(nodes);
         }
-        fetchPosts();
-    },[search]);
-    // passing the data about each blog post into the react component Posts via the variable posts,
-    // in order to populate their text/images on the page
-    return (
-        <>
-            <Header/>
-            <div className="home">
-                <Posts posts={posts}/>
-                <Sidebar/>
-            </div>
-        </>
-    )
-}
+      };
+      return (
+        
+        <Graph
+          style={{border: '1px solid red', width: "100%", height: "1000px"}}
+          graph={graph}
+          options={options}
+          events={events}
+          getNetwork={(network) => {
+            //  if you want access to vis.js network api you can set the state in a parent component using this property
+          }}
+        />
+    
+      );
+    }
