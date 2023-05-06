@@ -42,27 +42,17 @@ build/Release
 node_modules/
 jspm_packages/
 
-# Distribution directories
-dist/
-
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
 # TypeScript cache
 *.tsbuildinfo
 
-
-# Typescript v1 declaration files
-typings/
-
 # Optional npm cache directory
 .npm
 
 # Optional eslint cache
 .eslintcache
-
-# Optional REPL history
-.node_repl_history
 
 # Optional stylelint cache
 .stylelintcache
@@ -72,6 +62,9 @@ typings/
 .rts2_cache_cjs/
 .rts2_cache_es/
 .rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
 
 # Output of 'npm pack'
 *.tgz
@@ -135,9 +128,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-/.pnp
-
-/.history
-.DS_Store
-/coverage
-/build
